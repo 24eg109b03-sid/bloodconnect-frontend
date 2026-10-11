@@ -31,12 +31,14 @@ function clearSession() {
   localStorage.removeItem(TOKEN_KEY);
 }
 
+const API_BASE_URL = 'https://bloodconnect-backend-production-aca1.up.railway.app';
+
 async function api(path, options = {}) {
   const token = localStorage.getItem(TOKEN_KEY);
   const headers = { ...(options.body ? { 'Content-Type': 'application/json' } : {}), ...options.headers };
   if (token) headers.Authorization = `Bearer ${token}`;
 
-  const response = await fetch(path, { ...options, headers });
+  const response = await fetch(`${API_BASE_URL}${path}`, { ...options, headers });
   if (response.status === 401 || response.status === 403) {
     if (response.status === 401) clearSession();
   }
